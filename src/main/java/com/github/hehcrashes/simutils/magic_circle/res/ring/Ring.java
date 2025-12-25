@@ -1,5 +1,6 @@
 package com.github.hehcrashes.simutils.magic_circle.res.ring;
 
+import com.github.hehcrashes.simutils.magic_circle.res.IDisplayable;
 import com.github.hehcrashes.simutils.magic_circle.res.marker.Marker;
 import com.github.hehcrashes.simutils.magic_circle.res.rune.Rune;
 
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Ring {
+public abstract class Ring implements IDisplayable {
     String name;
     public String getDisplayName() {
         return name;     // 或者更友好的名字

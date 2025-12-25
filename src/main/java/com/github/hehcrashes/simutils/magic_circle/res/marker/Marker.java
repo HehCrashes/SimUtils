@@ -1,9 +1,8 @@
 package com.github.hehcrashes.simutils.magic_circle.res.marker;
 
-import com.github.hehcrashes.simutils.magic_circle.res.ExecutionContext;
+import com.github.hehcrashes.simutils.magic_circle.res.IDisplayable;
 
-public interface Marker {
+public interface Marker extends IDisplayable {
     void execute();
-    String getDisplayName();
 }
 

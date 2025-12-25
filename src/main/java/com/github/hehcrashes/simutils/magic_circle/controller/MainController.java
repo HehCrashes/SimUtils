@@ -118,18 +118,24 @@ public class MainController {
 
         if (data.startsWith("RING:") &&
                 (target.getValue().type.equals("WORKSPACE") ||
-                 target.getValue().type.equals("SLOT") ||
-                 target.getValue().type.equals("MC"))) {
+                        target.getValue().type.equals("SLOT") ||
+                        target.getValue().type.equals("MC"))) {   // 👈 允许拖到子环槽
             try {
                 Class<?> clazz = Class.forName(data.substring(5));
                 Ring r = (Ring) clazz.getDeclaredConstructor().newInstance();
-
-                TreeItem<NodeData> ringNode = new TreeItem<>(new NodeData("RING", r));
-                target.getChildren().add(ringNode);
-                target.setExpanded(true);
-                addRingSlots(ringNode, r, getTreeDepth(target));
-                System.out.println("Added ringNode: " + ringNode.getValue());
-
+                if (target.getValue().type.equals("SLOT")) {
+                    target.setValue(new NodeData("RING", r));
+                    target.getChildren().clear();
+                    addRingSlots(target, r, getTreeDepth(target));
+                    System.out.println("Replaced SLOT with ring: " + r.getDisplayName());
+                }
+                else {
+                    TreeItem<NodeData> ringNode = new TreeItem<>(new NodeData("RING", r));
+                    target.getChildren().add(ringNode);
+                    target.setExpanded(true);
+                    addRingSlots(ringNode, r, getTreeDepth(ringNode));
+                    System.out.println("Added ringNode: " + ringNode.getValue());
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

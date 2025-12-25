@@ -136,13 +136,23 @@ public class MainController {
         }
 
         if (data.startsWith("RUNE:") && target.getValue().type.equals("RUNE_SLOT")) {
-            target.setValue(new NodeData("RUNE", data.substring(5)));
-            System.out.println("Added RUNE: " + data.substring(5));
+            try {
+                Class<?> clazz = Class.forName(data.substring(5));
+                Rune rune = (Rune) clazz.getDeclaredConstructor().newInstance();
+                target.setValue(new NodeData("RUNE", rune));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
 
         if (data.startsWith("MARKER:") && target.getValue().type.equals("MARKER_SLOT")) {
-            target.setValue(new NodeData("MARKER", data.substring(7)));
-            System.out.println("Added MARKER: " + data.substring(7));
+            try {
+                Class<?> clazz = Class.forName(data.substring(7));
+                Marker marker = (Marker) clazz.getDeclaredConstructor().newInstance();
+                target.setValue(new NodeData("MARKER", marker));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
 
         sceneTree.refresh();

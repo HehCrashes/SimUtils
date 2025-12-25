@@ -127,7 +127,7 @@ public class MainController {
                 TreeItem<NodeData> ringNode = new TreeItem<>(new NodeData("RING", r));
                 target.getChildren().add(ringNode);
                 target.setExpanded(true);
-                addRingSlots(ringNode, r, 1);
+                addRingSlots(ringNode, r, getTreeDepth(target));
                 System.out.println("Added ringNode: " + ringNode.getValue());
 
             } catch (Exception ex) {
@@ -150,17 +150,32 @@ public class MainController {
     }
 
     private void addRingSlots(TreeItem<NodeData> ringNode, Ring ring, int depth) {
-        for (int i = 0; i < ring.getRuneSlots(); i++)
+        // 添加符文槽
+        for (int i = 0; i < ring.getRuneSlots(); i++) {
             ringNode.getChildren().add(new TreeItem<>(new NodeData("RUNE_SLOT", "符文槽 #" + i)));
-
-        if (depth < 3) {
-            for (int i = 0; i < ring.getChildSlots(); i++)
-                ringNode.getChildren().add(new TreeItem<>(new NodeData("SLOT", "子环槽 #" + i)));
         }
 
+        // 只在 depth < MAX_DEPTH 时添加子环槽
+        int MAX_DEPTH = 3; // 主环 depth = 0, 子环 depth = 1, 不再生成子环
+        if (depth <= MAX_DEPTH) {
+            for (int i = 0; i < ring.getChildSlots(); i++) {
+                TreeItem<NodeData> slot = new TreeItem<>(new NodeData("SLOT", "子环槽 #" + i));
+                ringNode.getChildren().add(slot);
+            }
+        }
+
+        // 添加标定槽
         ringNode.getChildren().add(new TreeItem<>(new NodeData("MARKER_SLOT", "标定槽")));
     }
-
+    private int getTreeDepth(TreeItem<?> item) {
+        int depth = 0;
+        TreeItem<?> parent = item.getParent();
+        while (parent != null) {
+            depth++;
+            parent = parent.getParent();
+        }
+        return depth;
+    }
     private void printTree(TreeItem<NodeData> node, int depth) {
         System.out.println(" ".repeat(depth * 2) + node.getValue());
         for (TreeItem<NodeData> child : node.getChildren()) {

@@ -13,6 +13,6 @@ module com.github.hehcrashes.simutils {
 
     opens com.github.hehcrashes.simutils.magic_circle to javafx.fxml;
     exports com.github.hehcrashes.simutils.magic_circle;
-    opens com.github.hehcrashes.simutils.thermodynamics to javafx.fxml;
-    exports com.github.hehcrashes.simutils.thermodynamics;
+    exports com.github.hehcrashes.simutils.magic_circle.controller;
+    opens com.github.hehcrashes.simutils.magic_circle.controller to javafx.fxml;
 }

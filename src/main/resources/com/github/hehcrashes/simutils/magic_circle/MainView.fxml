@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.*?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.github.hehcrashes.simutils.magic_circle.controller.MainController">
+
+    <!-- 左侧：场景栏 -->
+    <left>
+        <VBox>
+            <ToolBar fx:id="sceneToolbar">
+                <Button fx:id="addRootBtn" text="+">
+                    <tooltip>
+                        <Tooltip text="创建法阵"/>
+                    </tooltip>
+                </Button>
+            </ToolBar>
+            <TreeView fx:id="sceneTree" prefWidth="220" VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </left>
+
+    <!-- 中间：画布 + 资源面板 -->
+    <center>
+        <VBox spacing="2">
+            <StackPane fx:id="canvasPane" style="-fx-background-color: #2b2b2b;" VBox.vgrow="ALWAYS">
+                <Canvas fx:id="canvas" width="600" height="400"/>
+            </StackPane>
+            <TabPane fx:id="resourceTabs" prefHeight="160" tabClosingPolicy="UNAVAILABLE">
+                <tabs>
+                    <Tab text="环">
+                        <ScrollPane>
+                            <TilePane fx:id="ringGrid" hgap="10" vgap="10" prefColumns="6"/>
+                        </ScrollPane>
+                    </Tab>
+                    <Tab text="符文">
+                        <ScrollPane>
+                            <TilePane fx:id="runeGrid" hgap="10" vgap="10" prefColumns="6"/>
+                        </ScrollPane>
+                    </Tab>
+                    <Tab text="标定">
+                        <ScrollPane>
+                            <TilePane fx:id="markerGrid" hgap="10" vgap="10" prefColumns="6"/>
+                        </ScrollPane>
+                    </Tab>
+                    <Tab text="预制件">
+                        <ListView fx:id="prefabList"/>
+                    </Tab>
+                </tabs>
+            </TabPane>
+        </VBox>
+    </center>
+
+    <!-- 右侧：属性面板 -->
+    <right>
+        <VBox fx:id="propertyBox" prefWidth="260">
+            <Accordion fx:id="propertyAccordion">
+                <panes>
+                    <TitledPane text="Transform">
+                        <content>
+                            <Label text="位置、旋转、缩放"/>
+                        </content>
+                    </TitledPane>
+                    <TitledPane text="Material">
+                        <content>
+                            <Label text="材质设置"/>
+                        </content>
+                    </TitledPane>
+                    <TitledPane text="Scripts">
+                        <content>
+                            <Label text="脚本组件"/>
+                        </content>
+                    </TitledPane>
+                </panes>
+            </Accordion>
+        </VBox>
+    </right>
+</BorderPane>

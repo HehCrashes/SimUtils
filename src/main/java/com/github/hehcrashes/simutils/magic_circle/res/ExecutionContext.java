@@ -16,7 +16,13 @@ public class ExecutionContext {
     }
 
     public void run(Ring root) {
-        runNextRune(root);
+        int runeSlots = root.getRuneSlots();
+        int childSlots = root.getChildSlots();
+        while (getRuneIndex() < runeSlots || getChildrenRingIndex() < childSlots){
+            runNextRune(root);
+            runNextRing(root);
+        }
+        runMarker(root);
     }
 
     public void init(){

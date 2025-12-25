@@ -6,4 +6,10 @@ public class HiMarker implements Marker{
     public void execute() {
         System.out.println("Hi！标定运行！");
     }
+
+    @Override
+    public String getDisplayName() {
+        return "Hi 标定";
+    }
+
 }

@@ -8,8 +8,10 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class Ring {
-
     String name;
+    public String getDisplayName() {
+        return name;     // 或者更友好的名字
+    }
 
     // 结构
     int runeSlots;

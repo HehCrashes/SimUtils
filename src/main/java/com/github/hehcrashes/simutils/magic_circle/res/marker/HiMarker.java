@@ -15,7 +15,7 @@ public class HiMarker implements Marker{
     }
 
     @Override
-    public void render(GraphicsContext gc, double cx, double cy, double scale, int cent) {
+    public void render(GraphicsContext gc, double r, double cx, double cy, double scale) {
 
     }
 }

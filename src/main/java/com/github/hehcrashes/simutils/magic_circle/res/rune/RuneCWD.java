@@ -14,7 +14,7 @@ public class RuneCWD implements Rune{
     }
 
     @Override
-    public void render(GraphicsContext gc, double cx, double cy, double scale, int cent) {
+    public void render(GraphicsContext gc, double r, double cx, double cy, double beginAngle, double allAngle, double scale) {
 
     }
 }

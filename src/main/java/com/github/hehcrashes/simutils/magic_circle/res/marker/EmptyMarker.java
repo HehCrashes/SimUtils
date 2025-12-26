@@ -2,6 +2,8 @@ package com.github.hehcrashes.simutils.magic_circle.res.marker;
 
 import javafx.scene.canvas.GraphicsContext;
 
+import static com.github.hehcrashes.simutils.magic_circle.controller.Render.strokeRotatedRect;
+
 public class EmptyMarker implements Marker{
     @Override
     public String getDisplayName() {
@@ -9,8 +11,9 @@ public class EmptyMarker implements Marker{
     }
 
     @Override
-    public void render(GraphicsContext gc, double cx, double cy, double scale, int cent) {
-
+    public void render(GraphicsContext gc, double r, double cx, double cy, double scale) {
+        strokeRotatedRect(gc,cx,cy,r/2*scale,r/2*scale,0);
+        strokeRotatedRect(gc,cx,cy,r/2*scale,r/2*scale,45);
     }
 
     @Override

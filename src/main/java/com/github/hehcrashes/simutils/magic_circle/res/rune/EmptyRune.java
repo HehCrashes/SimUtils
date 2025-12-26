@@ -3,6 +3,7 @@ package com.github.hehcrashes.simutils.magic_circle.res.rune;
 import com.github.hehcrashes.simutils.magic_circle.res.ExecutionContext;
 import com.github.hehcrashes.simutils.magic_circle.res.ring.Ring;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.ArcType;
 
 public class EmptyRune implements Rune{
     @Override
@@ -11,8 +12,8 @@ public class EmptyRune implements Rune{
     }
 
     @Override
-    public void render(GraphicsContext gc, double cx, double cy, double scale, int cent) {
-
+    public void render(GraphicsContext gc, double r, double cx, double cy, double beginAngle, double allAngle, double scale) {
+        gc.strokeArc(cx - r*scale, cy - r*scale, 2*r*scale, 2*r*scale, beginAngle, allAngle, ArcType.OPEN);
     }
 
     @Override

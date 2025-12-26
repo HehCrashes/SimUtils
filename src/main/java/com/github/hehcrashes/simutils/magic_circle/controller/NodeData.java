@@ -4,7 +4,7 @@ import com.github.hehcrashes.simutils.magic_circle.res.IDisplayable;
 
 public class NodeData {
 
-    public String type; // WORKSPACE / MC / RING / SLOT / RUNE / MARKER
+    public String type; // WORKSPACE / MC / RING / RUNE / MARKER
     public Object obj;  // Ring, Rune, Marker, 或 String
 
     public NodeData(String type, Object obj) {

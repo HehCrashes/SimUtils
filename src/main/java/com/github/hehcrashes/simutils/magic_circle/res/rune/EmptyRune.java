@@ -3,18 +3,21 @@ package com.github.hehcrashes.simutils.magic_circle.res.rune;
 import com.github.hehcrashes.simutils.magic_circle.res.ExecutionContext;
 import com.github.hehcrashes.simutils.magic_circle.res.ring.Ring;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.ArcType;
 
-public class RuneCWD implements Rune{
-    @Override
-    public void apply(ExecutionContext ctx, Ring ring) {
-    }
+public class EmptyRune implements Rune{
     @Override
     public String getDisplayName() {
-        return "CWD 符文";
+        return "空符文";
     }
 
     @Override
     public void render(GraphicsContext gc, double r, double cx, double cy, double beginAngle, double allAngle, double scale) {
+        gc.strokeArc(cx - r*scale, cy - r*scale, 2*r*scale, 2*r*scale, beginAngle, allAngle, ArcType.OPEN);
+    }
+
+    @Override
+    public void apply(ExecutionContext ctx, Ring ring) {
 
     }
 }

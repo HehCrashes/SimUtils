@@ -1,11 +1,16 @@
 package com.github.hehcrashes.simutils.magic_circle.controller;
 
 import com.github.hehcrashes.simutils.magic_circle.res.*;
+import com.github.hehcrashes.simutils.magic_circle.res.marker.EmptyMarker;
 import com.github.hehcrashes.simutils.magic_circle.res.marker.Marker;
+import com.github.hehcrashes.simutils.magic_circle.res.ring.EmptyRing;
 import com.github.hehcrashes.simutils.magic_circle.res.ring.Ring;
+import com.github.hehcrashes.simutils.magic_circle.res.ring.Ring44;
+import com.github.hehcrashes.simutils.magic_circle.res.rune.EmptyRune;
 import com.github.hehcrashes.simutils.magic_circle.res.rune.Rune;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.*;
@@ -116,26 +121,19 @@ public class MainController {
 
         System.out.println("handleDrop called! target = " + target.getValue() + ", data = " + data);
 
-        if (data.startsWith("RING:") &&
-                (target.getValue().type.equals("WORKSPACE") ||
-                 target.getValue().type.equals("SLOT") ||
-                 target.getValue().type.equals("MC"))) {
+        if (data.startsWith("RING:") && (target.getValue().type.equals("RING") || target.getValue().type.equals("MC"))) {
             try {
                 Class<?> clazz = Class.forName(data.substring(5));
                 Ring r = (Ring) clazz.getDeclaredConstructor().newInstance();
-
-                TreeItem<NodeData> ringNode = new TreeItem<>(new NodeData("RING", r));
-                target.getChildren().add(ringNode);
-                target.setExpanded(true);
-                addRingSlots(ringNode, r, getTreeDepth(target));
-                System.out.println("Added ringNode: " + ringNode.getValue());
-
+                target.setValue(new NodeData("RING", r));
+                target.getChildren().clear();
+                addRingSlots(target, r, getTreeDepth(target));
+                System.out.println("Added ringNode: " + r.getDisplayName());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
-
-        if (data.startsWith("RUNE:") && target.getValue().type.equals("RUNE_SLOT")) {
+        if (data.startsWith("RUNE:") && target.getValue().type.equals("RUNE")) {
             try {
                 Class<?> clazz = Class.forName(data.substring(5));
                 Rune rune = (Rune) clazz.getDeclaredConstructor().newInstance();
@@ -144,8 +142,7 @@ public class MainController {
                 ex.printStackTrace();
             }
         }
-
-        if (data.startsWith("MARKER:") && target.getValue().type.equals("MARKER_SLOT")) {
+        if (data.startsWith("MARKER:") && target.getValue().type.equals("MARKER")) {
             try {
                 Class<?> clazz = Class.forName(data.substring(7));
                 Marker marker = (Marker) clazz.getDeclaredConstructor().newInstance();
@@ -157,25 +154,27 @@ public class MainController {
 
         sceneTree.refresh();
         printTree(workspaceRoot, 0); // 打印结构
-    }
 
+        canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        Render.render(workspaceRoot.getChildren().getFirst(), canvas.getGraphicsContext2D(), canvas.getWidth() / 2.0,canvas.getHeight() / 2.0,1);
+    }
     private void addRingSlots(TreeItem<NodeData> ringNode, Ring ring, int depth) {
-        // 添加符文槽
+        // 添加符文
         for (int i = 0; i < ring.getRuneSlots(); i++) {
-            ringNode.getChildren().add(new TreeItem<>(new NodeData("RUNE_SLOT", "符文槽 #" + i)));
+            ringNode.getChildren().add(new TreeItem<>(new NodeData("RUNE", new EmptyRune())));
         }
 
         // 只在 depth < MAX_DEPTH 时添加子环槽
-        int MAX_DEPTH = 3; // 主环 depth = 0, 子环 depth = 1, 不再生成子环
-        if (depth <= MAX_DEPTH) {
+        int MAX_DEPTH = 3;
+        if (depth < MAX_DEPTH) {
             for (int i = 0; i < ring.getChildSlots(); i++) {
-                TreeItem<NodeData> slot = new TreeItem<>(new NodeData("SLOT", "子环槽 #" + i));
+                TreeItem<NodeData> slot = new TreeItem<>(new NodeData("RING", new EmptyRing()));
                 ringNode.getChildren().add(slot);
             }
         }
 
-        // 添加标定槽
-        ringNode.getChildren().add(new TreeItem<>(new NodeData("MARKER_SLOT", "标定槽")));
+        // 添加标定
+        ringNode.getChildren().add(new TreeItem<>(new NodeData("MARKER", new EmptyMarker())));
     }
     private int getTreeDepth(TreeItem<?> item) {
         int depth = 0;
@@ -187,7 +186,7 @@ public class MainController {
         return depth;
     }
     private void printTree(TreeItem<NodeData> node, int depth) {
-        System.out.println(" ".repeat(depth * 2) + node.getValue());
+        System.out.println(" ".repeat(depth * 2) + node.getValue() + " :: " + node.getValue().type);
         for (TreeItem<NodeData> child : node.getChildren()) {
             printTree(child, depth + 1);
         }

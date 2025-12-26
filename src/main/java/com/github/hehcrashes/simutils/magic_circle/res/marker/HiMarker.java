@@ -1,5 +1,7 @@
 package com.github.hehcrashes.simutils.magic_circle.res.marker;
 
+import javafx.scene.canvas.GraphicsContext;
+
 public class HiMarker implements Marker{
 
     @Override
@@ -12,4 +14,8 @@ public class HiMarker implements Marker{
         return "Hi 标定";
     }
 
+    @Override
+    public void render(GraphicsContext gc, double cx, double cy, double scale, int cent) {
+
+    }
 }

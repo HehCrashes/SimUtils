@@ -17,6 +17,11 @@ public class Ring44 extends Ring{
         gc.strokeOval(cx - (r * scale + 4),cy - (r * scale + 4),2*(r * scale + 4),2*(r * scale + 4));
         gc.strokeOval(cx - (r * scale - 4),cy - (r * scale - 4),2*(r * scale - 4),2*(r * scale - 4));
     }
+
+    @Override
+    public void review(GraphicsContext gc) {
+        this.render(gc,128,gc.getCanvas().getWidth() / 2,gc.getCanvas().getHeight() / 2,1);
+    }
 }
 
 

@@ -18,4 +18,8 @@ public class HiMarker implements Marker{
     public void render(GraphicsContext gc, double r, double cx, double cy, double scale) {
 
     }
+    @Override
+    public void review(GraphicsContext gc) {
+        this.render(gc,128,gc.getCanvas().getWidth() / 2,gc.getCanvas().getHeight() / 2,1);
+    }
 }

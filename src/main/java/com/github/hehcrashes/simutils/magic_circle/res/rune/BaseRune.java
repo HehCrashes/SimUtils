@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 
 import static com.github.hehcrashes.simutils.magic_circle.res.ResourceManager.textures;
 
-public abstract class BaseRune implements Rune{
+public class BaseRune implements Rune{
     protected Image getTexture(){
         return textures.get("0001");
     }
@@ -23,9 +23,9 @@ public abstract class BaseRune implements Rune{
         if (reader == null) return;
         int L = (int) getTexture().getWidth();
         int H = (int) getTexture().getHeight();
-        double d = allAngle / L;
+        double d = Math.toRadians(allAngle) / L;
         for (int x = 0; x < L; x++) {
-            double phi = beginAngle + x * d;
+            double phi = Math.toRadians(beginAngle) + x * d;
             for (int y = 0; y < H; y++) {
                 double rr = R + (H - 1 - y) * scale;
                 double px = cx + rr * Math.cos(phi);
@@ -54,7 +54,7 @@ public abstract class BaseRune implements Rune{
     }
     @Override
     public void previewArc(GraphicsContext gc) {
-        render(gc, 128, gc.getCanvas().getWidth() / 2,gc.getCanvas().getHeight() / 2, -Math.PI / 2 ,Math.PI / 2,0.15);
+        render(gc, 128, gc.getCanvas().getWidth() / 2,gc.getCanvas().getHeight() / 2, -90 ,90,0.15);
     }
     @Override
     public void apply(ExecutionContext ctx, Ring ring) {}

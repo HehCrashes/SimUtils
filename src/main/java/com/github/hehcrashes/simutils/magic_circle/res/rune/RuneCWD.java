@@ -2,19 +2,21 @@ package com.github.hehcrashes.simutils.magic_circle.res.rune;
 
 import com.github.hehcrashes.simutils.magic_circle.res.ExecutionContext;
 import com.github.hehcrashes.simutils.magic_circle.res.ring.Ring;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
-public class RuneCWD implements Rune{
+import static com.github.hehcrashes.simutils.magic_circle.res.ResourceManager.textures;
+
+public class RuneCWD extends BaseRune {
     @Override
-    public void apply(ExecutionContext ctx, Ring ring) {
+    protected Image getTexture(){
+        return textures.get("HuzrahYol");
     }
     @Override
     public String getDisplayName() {
-        return "CWD 符文";
+        return "倾听:火 符文";
     }
-
     @Override
-    public void render(GraphicsContext gc, double r, double cx, double cy, double beginAngle, double allAngle, double scale) {
+    public void apply(ExecutionContext ctx, Ring ring) {
 
     }
 }

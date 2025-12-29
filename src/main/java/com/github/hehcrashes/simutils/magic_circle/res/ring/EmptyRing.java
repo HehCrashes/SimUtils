@@ -14,4 +14,8 @@ public class EmptyRing extends Ring{
         gc.setLineWidth(2);
         gc.fillOval(cx - 8*scale,cy - 8*scale,2*8*scale,2*8*scale);
     }
+    @Override
+    public void preview(GraphicsContext gc) {
+        this.render(gc,128,gc.getCanvas().getWidth() / 2,gc.getCanvas().getHeight() / 2,1);
+    }
 }

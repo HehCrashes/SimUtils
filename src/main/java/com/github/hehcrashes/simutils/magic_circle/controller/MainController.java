@@ -1,21 +1,28 @@
 package com.github.hehcrashes.simutils.magic_circle.controller;
 
+import com.github.hehcrashes.simutils.magic_circle.IPreviewer;
 import com.github.hehcrashes.simutils.magic_circle.res.*;
 import com.github.hehcrashes.simutils.magic_circle.res.marker.EmptyMarker;
 import com.github.hehcrashes.simutils.magic_circle.res.marker.Marker;
 import com.github.hehcrashes.simutils.magic_circle.res.ring.EmptyRing;
 import com.github.hehcrashes.simutils.magic_circle.res.ring.Ring;
-import com.github.hehcrashes.simutils.magic_circle.res.ring.Ring44;
 import com.github.hehcrashes.simutils.magic_circle.res.rune.EmptyRune;
 import com.github.hehcrashes.simutils.magic_circle.res.rune.Rune;
+import com.github.hehcrashes.simutils.magic_circle.res.rune.RuneCWD;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class MainController {
 
@@ -56,6 +63,7 @@ public class MainController {
         for (Ring ring : ResourceManager.rings) {
             VBox tile = ResourceTile.create(ringIcon, ring.getDisplayName());
             tile.setOnDragDetected(e -> startDrag(tile, "RING:" + ring.getClass().getName(), ringIcon));
+            attachPreviewMenuGeneric(tile, ring,"预览", IRenderable::preview);
             ringGrid.getChildren().add(tile);
         }
 
@@ -63,6 +71,8 @@ public class MainController {
         for (Rune rune : ResourceManager.runes) {
             VBox tile = ResourceTile.create(runeIcon, rune.getDisplayName());
             tile.setOnDragDetected(e -> startDrag(tile, "RUNE:" + rune.getClass().getName(), runeIcon));
+            attachPreviewMenuGeneric(tile, rune,"预览", IRenderable::preview);
+            attachPreviewMenuGeneric(tile, rune,"环上预览", IRenderableArc::previewArc);
             runeGrid.getChildren().add(tile);
         }
 
@@ -70,6 +80,7 @@ public class MainController {
         for (Marker marker : ResourceManager.markers) {
             VBox tile = ResourceTile.create(markerIcon, marker.getDisplayName());
             tile.setOnDragDetected(e -> startDrag(tile, "MARKER:" + marker.getClass().getName(), markerIcon));
+            attachPreviewMenuGeneric(tile, marker,"预览", IRenderable::preview);
             markerGrid.getChildren().add(tile);
         }
 
@@ -105,7 +116,6 @@ public class MainController {
             }
         });
     }
-
     private void startDrag(VBox tile, String data, Image dragView) {
         Dragboard db = tile.startDragAndDrop(TransferMode.COPY);
         ClipboardContent cc = new ClipboardContent();
@@ -114,7 +124,6 @@ public class MainController {
         db.setDragView(dragView);
         System.out.println("Drag started: " + data);
     }
-
     private void handleDrop(TreeItem<NodeData> target, Dragboard db) {
         String data = db.getString();
         if (data == null) return;
@@ -190,5 +199,53 @@ public class MainController {
         for (TreeItem<NodeData> child : node.getChildren()) {
             printTree(child, depth + 1);
         }
+    }
+    private <T> void attachPreviewMenuGeneric(
+            VBox tile,
+            T resource,
+            String title,
+            IPreviewer<T> previewer
+    ) {
+        ContextMenu menu;
+
+        Object data = tile.getUserData();
+        if (data instanceof ContextMenu existing) {
+            menu = existing;
+        } else {
+            menu = new ContextMenu();
+            tile.setUserData(menu);
+            tile.setOnContextMenuRequested(
+                    ev -> menu.show(tile, ev.getScreenX(), ev.getScreenY())
+            );
+        }
+        MenuItem previewItem = new MenuItem(title);
+
+        previewItem.setOnAction(e -> {
+            try {
+                Stage previewStage = new Stage();
+                previewStage.setTitle(title);
+
+                double w = 320, h = 320;
+                Canvas previewCanvas = new Canvas(w, h);
+                GraphicsContext pgc = previewCanvas.getGraphicsContext2D();
+
+                pgc.setFill(Color.color(0.12, 0.12, 0.12));
+                pgc.fillRect(0, 0, w, h);
+
+                previewer.preview(resource, pgc);
+
+                StackPane root = new StackPane(previewCanvas);
+                root.setPadding(new Insets(10));
+
+                previewStage.setScene(new Scene(root));
+                previewStage.show();
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                new Alert(Alert.AlertType.ERROR,
+                        "预览失败: " + ex.getMessage()).showAndWait();
+            }
+        });
+        menu.getItems().add(previewItem);
     }
 }

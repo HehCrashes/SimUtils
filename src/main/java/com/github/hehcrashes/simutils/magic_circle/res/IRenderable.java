@@ -4,5 +4,6 @@ import javafx.scene.canvas.GraphicsContext;
 
 public interface IRenderable {
     void render(GraphicsContext gc,double r, double cx, double cy,double scale);
+    void preview(GraphicsContext gc);
 }
 

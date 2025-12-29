@@ -40,7 +40,7 @@ public class Render {
                 }
                 else if (cd.type.equals("RUNE")){
                     Rune rune = (Rune) cd.obj;
-                    rune.render(gc,r,cx,cy,FullAngle * runeIndex * 2 - FullAngle/2,FullAngle,scale);
+                    rune.render(gc,r,cx,cy,FullAngle * runeIndex * 2 - FullAngle,FullAngle*2,scale * 0.15);
                     runeIndex++;
                 }
                 else if (cd.type.equals("MARKER")) {

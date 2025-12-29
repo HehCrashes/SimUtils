@@ -6,7 +6,7 @@ import com.github.hehcrashes.simutils.magic_circle.res.IRenderable;
 import com.github.hehcrashes.simutils.magic_circle.res.IRenderableArc;
 import com.github.hehcrashes.simutils.magic_circle.res.ring.Ring;
 
-public interface Rune extends IDisplayable, IRenderableArc {
+public interface Rune extends IDisplayable, IRenderable, IRenderableArc {
     void apply(ExecutionContext ctx, Ring ring);
 
 }

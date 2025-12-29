@@ -20,7 +20,7 @@ public class EmptyMarker implements Marker{
         strokeRotatedRect(gc,cx,cy,r/2*scale,r/2*scale,45);
     }
     @Override
-    public void review(GraphicsContext gc) {
+    public void preview(GraphicsContext gc) {
         this.render(gc,128,gc.getCanvas().getWidth() / 2,gc.getCanvas().getHeight() / 2,1);
     }
 
